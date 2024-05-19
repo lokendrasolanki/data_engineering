@@ -45,3 +45,14 @@ SELECT
     ) AS prev_product_sales
 FROM
     sales ;
+
+--Use Case
+SELECT product, year, sales_amount,
+    sales_amount - LAG(sales_amount, 1) OVER ( 
+        PARTITION BY product
+        ORDER BY year
+    ) AS year_over_year_diff,
+    LEAD(sales_amount, 1, 0) OVER (PARTITION BY product
+        ORDER BY year) - sales_amount AS next_year_diff
+FROM sales ORDER BY product, year;
+
